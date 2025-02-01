@@ -48,23 +48,21 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
 
     # Solve the model
     model.solve()
-
+                                       
     # Output selected suppliers and allocations per week
     selected_allocations = {(s, t): x[s, t].varValue * weekly_demand[t] for s in suppliers for t in range(num_weeks) if x[s, t].varValue > 0}
-
+    
     model_result = LpStatus[model.status]
-      
+    
     # Create a new list to hold details with added cost info
     detailed_results = []
-    for (s, t), allocation in selected_allocations.items():
-        allocation_cost = allocation * costs[s]  # Cost for this allocation
-        detailed_results.append({
-            "Week": t + 1,  # Week number
-            "Demand": weekly_demand[t],  # Weekly demand
-            "Supplier": s + 1,  # Supplier index (adjusted for 1-based index)
-            "Allocation": round(allocation, 0),  # Rounded allocation
-            "Cost": round(allocation_cost, 2)  # Rounded cost for that allocation
-        })
+    for t in range(num_weeks):
+        week_data = {"Week": t + 1, "Demand": weekly_demand[t]}  # Initialize week data with demand
+        for s in suppliers:
+            allocation = selected_allocations.get((s, t), 0)  # Get allocation for supplier s in week t
+            allocation_cost = allocation * costs[s]  # Cost for this allocation
+            week_data[f"Supplier {s + 1} Cost"] = round(allocation_cost, 2)  # Add cost for this supplier in this week
+        detailed_results.append(week_data)
 
     return detailed_results, model_result
 
@@ -105,13 +103,12 @@ if st.button("Optimize"):
         st.success("Status: Optimal")
       
         # Convert to DataFrame for better formatting
-        df = pd.DataFrame(results)
+        df = pd.DataFrame(detailed_results)
         
         # Display the DataFrame in Streamlit
         st.write("Results in a Tabular Form:")
-      
         if not df.empty:
-            st.dataframe(df.style.format({"Allocation": "{:.0f}", "Cost": "${:.2f}"}))
+            st.dataframe(df.style.format({f"Supplier {s + 1} Cost": "${:.2f}" for s in suppliers}))
     else:
         st.warning("No feasible solution found!")
 
