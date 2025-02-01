@@ -3,13 +3,11 @@ import pandas as pd
 from pulp import LpProblem, LpMinimize, LpVariable, lpSum, value, LpStatus
 import random
 
-def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, costs, lead_times, quality_scores, 
+def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppliers, costs, lead_times, quality_scores, 
                                      capacities, min_order, num_active_suppliers, weekly_demand, service_rate):
 
     # Create optimization model
     model = LpProblem("Supplier_Selection_Optimization", LpMinimize)
-
-    suppliers =  [i for i in range(num_suppliers)]
 
     # Decision variables: Fraction of demand fulfilled by each supplier per week
     x = {(s, t): LpVariable(f"Supplier_{s}_Week_{t}", lowBound=0, upBound=1, cat='Continuous')
@@ -90,7 +88,7 @@ else:
 
 # Solve and Display Results
 if st.button("Optimize"):
-    results = solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, costs, lead_times, quality_scores, 
+    results = solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppliers, costs, lead_times, quality_scores, 
                                      capacities, min_order, num_active_suppliers, weekly_demand, service_rate)
 
     st.subheader("Optimization Results")
