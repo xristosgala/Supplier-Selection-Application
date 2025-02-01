@@ -60,6 +60,7 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
         week_data = {"Week": t + 1, "Demand": weekly_demand[t]}  # Initialize week data with demand
         for s in suppliers:
             allocation = selected_allocations.get((s, t), 0)  # Get allocation for supplier s in week t
+            week_data[f"Supplier {s +  1} Allocation"] = round(allocation, 2) # Add allocation for this supplier in this week
             allocation_cost = allocation * costs[s]  # Cost for this allocation
             week_data[f"Supplier {s + 1} Cost"] = round(allocation_cost, 2)  # Add cost for this supplier in this week
         detailed_results.append(week_data)
@@ -108,7 +109,8 @@ if st.button("Optimize"):
         # Display the DataFrame in Streamlit
         st.write("Results in a Tabular Form:")
         if not df.empty:
-            st.dataframe(df.style.format({f"Supplier {s + 1} Cost": "${:.2f}" for s in suppliers}))
+            st.dataframe(df.style.format({f"Supplier {s + 1} Cost": "${:.2f}" for s in suppliers})),
+            st.dataframe(df.style.format({f"Supplier {s +  1} Allocation": "{:.2f} Units" for s in suppliers}))
     else:
         st.warning("No feasible solution found!")
 
