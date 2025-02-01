@@ -32,7 +32,6 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
     normalized_lead = {s: safe_normalization(lead_times[s], lead_min, lead_max) for s in suppliers}
     normalized_quality = {s: safe_normalization_quality(quality_scores[s], quality_min, quality_max) for s in suppliers}
 
-
     model += lpSum([
         x[s, t] * weekly_demand[t] * (w1 * normalized_costs[s] + w2 * normalized_lead[s] + w3 * normalized_quality[s]) 
         for s in suppliers for t in range(num_weeks)
