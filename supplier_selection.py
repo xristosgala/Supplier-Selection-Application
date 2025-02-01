@@ -71,6 +71,7 @@ w1 = st.sidebar.number_input("Cost Weight", min_value=0.0, max_value=1.0, value=
 w2 = st.sidebar.number_input("Lead Time Weight", min_value=0.0, max_value=1.0, value=0.3)
 w3 = st.sidebar.number_input("Quality Weight", min_value=0.0, max_value=1.0, value=0.2)
 num_suppliers = st.sidebar.number_input("Number of Suppliers", min_value=1, max_value=10, value=3)
+suppliers =  [i for i in range(num_suppliers)]
 costs = {supplier: st.sidebar.number_input(f"Cost for Supplier {supplier+1}", min_value=1, max_value=100, value=10) for supplier in suppliers}
 lead_times = {supplier: st.sidebar.number_input(f"Lead Time for Supplier {supplier+1}", min_value=1, max_value=100, value=12) for supplier in suppliers}
 quality_scores = {supplier: st.sidebar.number_input(f"Quality Score for Supplier {supplier+1}", min_value=1, max_value=100, value=8) for supplier in suppliers}
