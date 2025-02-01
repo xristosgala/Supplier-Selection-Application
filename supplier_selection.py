@@ -102,6 +102,6 @@ if st.button("Optimize"):
         st.write("Results in a Tabular Form:")
         if not df.empty:
             st.dataframe(df.style.format({"Allocation": "{:.0f}"}))
-        else:
-            st.warning("No feasible solution found!")
+    else:
+        st.warning("No feasible solution found!")
 
