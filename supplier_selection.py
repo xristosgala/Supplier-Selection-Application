@@ -59,7 +59,7 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
 
     for (s, t), allocation in selected_allocations.items():
         results['Details'].append({"Week": t + 1, "Supplier": s + 1, "Allocation": round(allocation, 0)})
-        results["Weekly Demand"]: weekly_demand[t]
+        results["Weekly Demand"].append(weekly_demand[t])
 
     
 
