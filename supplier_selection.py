@@ -22,11 +22,11 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
     lead_min, lead_max = min(lead_times.values()), max(lead_times.values())
     quality_min, quality_max = min(quality_scores.values()), max(quality_scores.values())
 
-    def safe_normalization(value, min_val, max_val):
-        return 0 if max_val == min_val else (value - min_val) / (max_val - min_val)
+    def safe_normalization(value, min_val, max_val, epsilon=1e-6):
+        return (value - min_val) / (max_val - min_val + epsilon)
     
-    def safe_normalization_quality(value, min_val, max_val):
-        return 0 if max_val == min_val else (max_val - value) / (max_val - min_val)
+    def safe_normalization_quality(value, min_val, max_val, epsilon=1e-6):
+        return (max_val - value) / (max_val - min_val + epsilon)
     
     normalized_costs = {s: safe_normalization(costs[s], cost_min, cost_max) for s in suppliers}
     normalized_lead = {s: safe_normalization(lead_times[s], lead_min, lead_max) for s in suppliers}
@@ -60,8 +60,6 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
 
     for (s, t), allocation in selected_allocations.items():
         results['Details'].append({"Week": t + 1, "Demand": weekly_demand[t], "Supplier": s + 1, "Allocation": round(allocation, 0)})
-
-    
 
     return results
 
