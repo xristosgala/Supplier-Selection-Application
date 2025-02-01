@@ -54,7 +54,7 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
     }
 
     for (s, t), allocation in selected_allocations.items():
-        results['Details'].append({"Week": t + 1, "Allocation": round(allocation, 0)})
+        results['Details'].append({"Week": t + 1, "Supplier": s + 1, "Allocation": round(allocation, 0)})
 
     
 
@@ -100,5 +100,8 @@ if st.button("Optimize"):
         # Convert results to DataFrame
         df = pd.DataFrame(results["Details"])
         st.write("Results in a Tabular Form:")
-        st.dataframe(df)
+        if not df.empty:
+            st.dataframe(df.style.format({"Allocation": "{:.0f}"}))
+        else:
+            st.warning("No feasible solution found!")
 
