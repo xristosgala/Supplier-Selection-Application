@@ -106,10 +106,16 @@ if st.button("Optimize"):
         # Convert to DataFrame for better formatting
         df = pd.DataFrame(detailed_results)
         
-        # Display the DataFrame in Streamlit
+        # Create a dictionary to format the Allocation and Cost columns
+        format_dict = {}
+        for s in suppliers:
+            format_dict[f"Supplier {s + 1} Allocation"] = "{:.2f}"
+            format_dict[f"Supplier {s + 1} Cost"] = "${:.2f}"
+        
+        # Display the DataFrame in Streamlit with the formatting
         st.write("Results in a Tabular Form:")
         if not df.empty:
-            st.dataframe(df.style.format({f"Supplier {s + 1} Allocation": "{:.2f}", f"Supplier {s + 1} Cost": "${:.2f}" for s in suppliers}))
+            st.dataframe(df.style.format(format_dict))
     else:
         st.warning("No feasible solution found!")
 
