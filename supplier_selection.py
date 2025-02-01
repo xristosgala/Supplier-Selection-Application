@@ -67,7 +67,7 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
             total_cost += allocation_cost
         detailed_results.append(week_data)
 
-    return detailed_results, model_result
+    return detailed_results, model_result, total_cost
 
 
 # Streamlit App
@@ -98,7 +98,7 @@ else:
 
 # Solve and Display Results
 if st.button("Optimize"):
-    detailed_results, model_result= solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppliers, costs, lead_times, quality_scores, 
+    detailed_results, model_result, total_cost = solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppliers, costs, lead_times, quality_scores, 
                                      capacities, min_order, num_active_suppliers, weekly_demand, service_rate)
 
     st.subheader("Optimization Results")
