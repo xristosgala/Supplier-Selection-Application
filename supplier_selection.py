@@ -72,7 +72,7 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
     if not df.empty:
         st.dataframe(df.style.format({"Allocation": "{:.0f}", "Cost": "${:.2f}"}))
 
-    return results
+    return detailed_results
 
 
 # Streamlit App
