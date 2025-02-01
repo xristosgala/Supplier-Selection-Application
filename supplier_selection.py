@@ -72,11 +72,11 @@ w2 = st.sidebar.number_input("Lead Time Weight", min_value=0.0, max_value=1.0, v
 w3 = st.sidebar.number_input("Quality Weight", min_value=0.0, max_value=1.0, value=0.2)
 num_suppliers = st.sidebar.number_input("Number of Suppliers", min_value=1, max_value=10, value=3)
 suppliers =  [i for i in range(num_suppliers)]
-costs = {supplier: st.sidebar.number_input(f"Cost for Supplier {supplier}", min_value=1, max_value=100, value=10) for supplier in suppliers}
-lead_times = {supplier: st.sidebar.number_input(f"Lead Time for Supplier {supplier}", min_value=1, max_value=100, value=12) for supplier in suppliers}
-quality_scores = {supplier: st.sidebar.number_input(f"Quality Score for Supplier {supplier}", min_value=1, max_value=100, value=8) for supplier in suppliers}
-capacities = {supplier: st.sidebar.number_input(f"Capacity for Supplier {supplier}", min_value=1, max_value=1000, value=100) for supplier in suppliers}
-min_order = {supplier: st.sidebar.number_input(f"Minimum Order for Supplier {supplier}", min_value=10, max_value=100, value=10) for supplier in suppliers}
+costs = {supplier: st.sidebar.number_input(f"Cost for Supplier {supplier+1}", min_value=1, max_value=100, value=10) for supplier in suppliers}
+lead_times = {supplier: st.sidebar.number_input(f"Lead Time for Supplier {supplier+1}", min_value=1, max_value=100, value=12) for supplier in suppliers}
+quality_scores = {supplier: st.sidebar.number_input(f"Quality Score for Supplier {supplier+1}", min_value=1, max_value=100, value=8) for supplier in suppliers}
+capacities = {supplier: st.sidebar.number_input(f"Capacity for Supplier {supplier+1}", min_value=1, max_value=1000, value=100) for supplier in suppliers}
+min_order = {supplier: st.sidebar.number_input(f"Minimum Order for Supplier {supplier+1}", min_value=10, max_value=100, value=10) for supplier in suppliers}
 num_active_suppliers = st.sidebar.number_input("Minimum Number of Active Suppliers", min_value=1, max_value=10, value=2)
 demand_range = st.sidebar.slider("Demand Range", min_value=10, max_value=1000, value=(20, 100))
 random_demand = st.sidebar.checkbox("Generate Random Demand", value=True)
