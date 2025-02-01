@@ -24,9 +24,9 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
 
     def safe_normalization(value, min_val, max_val):
         return 0 if max_val == min_val else (value - min_val) / (max_val - min_val)
-
-   def safe_normalization_quality(value, min_val, max_val):
-       return 0 if max_val == min_val else (max_val - value) / (max_val - min_val)
+    
+    def safe_normalization_quality(value, min_val, max_val):
+        return 0 if max_val == min_val else (max_val - value) / (max_val - min_val)
     
     normalized_costs = {s: safe_normalization(costs[s], cost_min, cost_max) for s in suppliers}
     normalized_lead = {s: safe_normalization(lead_times[s], lead_min, lead_max) for s in suppliers}
