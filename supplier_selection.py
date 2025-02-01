@@ -52,14 +52,25 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
     # Output selected suppliers and allocations per week
     selected_allocations = {(s, t): x[s, t].varValue * weekly_demand[t] for s in suppliers for t in range(num_weeks) if x[s, t].varValue > 0}
       
-    results = {
-        "Status": LpStatus[model.status],
-        "Total Cost": round(model.objective.value(), 3),
-        "Details": []
-    }
-
+    # Create a new list to hold details with added cost info
+    detailed_results = []
     for (s, t), allocation in selected_allocations.items():
-        results['Details'].append({"Week": t + 1, "Demand": weekly_demand[t], "Supplier": s + 1, "Allocation": round(allocation, 0)})
+        allocation_cost = allocation * costs[s]  # Cost for this allocation
+        detailed_results.append({
+            "Week": t + 1,  # Week number
+            "Demand": weekly_demand[t],  # Weekly demand
+            "Supplier": s + 1,  # Supplier index (adjusted for 1-based index)
+            "Allocation": round(allocation, 0),  # Rounded allocation
+            "Cost": round(allocation_cost, 2)  # Rounded cost for that allocation
+        })
+    
+    # Convert to DataFrame for better formatting
+    df = pd.DataFrame(detailed_results)
+    
+    # Display the DataFrame in Streamlit
+    st.write("Results in a Tabular Form:")
+    if not df.empty:
+        st.dataframe(df.style.format({"Allocation": "{:.0f}", "Cost": "${:.2f}"}))
 
     return results
 
