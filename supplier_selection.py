@@ -54,7 +54,7 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
       
     results = {
         "Status": LpStatus[model.status],
-        "Total Cost": round(model.objective.value() - , 3),
+        "Total Cost": round(model.objective.value(), 3),
         "Details": []
     }
 
