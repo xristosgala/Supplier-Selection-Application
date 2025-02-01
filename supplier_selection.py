@@ -56,6 +56,7 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
     
     # Create a new list to hold details with added cost info
     detailed_results = []
+    total_cost = 0  # Variable to store the total cost
     for t in range(num_weeks):
         week_data = {"Week": t + 1, "Demand": weekly_demand[t]}  # Initialize week data with demand
         for s in suppliers:
@@ -63,6 +64,7 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
             week_data[f"Supplier {s +  1} Allocation"] = round(allocation, 2) # Add allocation for this supplier in this week
             allocation_cost = allocation * costs[s]  # Cost for this allocation
             week_data[f"Supplier {s + 1} Cost"] = round(allocation_cost, 2)  # Add cost for this supplier in this week
+            total_cost += allocation_cost
         detailed_results.append(week_data)
 
     return detailed_results, model_result
@@ -111,6 +113,9 @@ if st.button("Optimize"):
         for s in suppliers:
             format_dict[f"Supplier {s + 1} Allocation"] = "{:.2f}"
             format_dict[f"Supplier {s + 1} Cost"] = "${:.2f}"
+        
+        # Display the Total Cost
+        st.write(f"**Total Cost: ${total_cost:,.2f}**")
         
         # Display the DataFrame in Streamlit with the formatting
         st.write("Results in a Tabular Form:")
