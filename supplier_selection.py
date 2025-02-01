@@ -94,7 +94,7 @@ service_rate = st.sidebar.slider("Service Rate", min_value=0.00, max_value=1.00,
 if random_demand:
     weekly_demand = [random.randint(demand_range[0], demand_range[1]) for _ in range(num_weeks)]
 else:
-    weekly_demand = [st.sidebar.number_input(f"Demand for Week {i+1}", min_value=1, value=random.randint(1,1000)) for i in range(num_weeks)]
+    weekly_demand = [st.sidebar.number_input(f"Demand for Week {i+1}", min_value=1, value=100) for i in range(num_weeks)]
 
 # Solve and Display Results
 if st.button("Optimize"):
