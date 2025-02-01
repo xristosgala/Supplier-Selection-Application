@@ -65,14 +65,6 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
             "Allocation": round(allocation, 0),  # Rounded allocation
             "Cost": round(allocation_cost, 2)  # Rounded cost for that allocation
         })
-    
-    # Convert to DataFrame for better formatting
-    df = pd.DataFrame(detailed_results)
-    
-    # Display the DataFrame in Streamlit
-    st.write("Results in a Tabular Form:")
-    if not df.empty:
-        st.dataframe(df.style.format({"Allocation": "{:.0f}", "Cost": "${:.2f}"}))
 
     return detailed_results, model_result
 
@@ -110,15 +102,14 @@ if st.button("Optimize"):
 
     st.subheader("Optimization Results")
     if model_result=='Optimal':
-        st.success(Status: Optimal)
+        st.success("Status: Optimal")
       
-        # Convert results to DataFrame
-        st.write("Results in a Tabular Form:")
         # Convert to DataFrame for better formatting
         df = pd.DataFrame(detailed_results)
         
         # Display the DataFrame in Streamlit
         st.write("Results in a Tabular Form:")
+      
         if not df.empty:
             st.dataframe(df.style.format({"Allocation": "{:.0f}", "Cost": "${:.2f}"}))
     else:
