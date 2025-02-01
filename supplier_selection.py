@@ -22,9 +22,13 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
     lead_min, lead_max = min(lead_times.values()), max(lead_times.values())
     quality_min, quality_max = min(quality_scores.values()), max(quality_scores.values())
 
-    normalized_costs = {s: (costs[s] - cost_min) / (cost_max - cost_min) for s in suppliers}
-    normalized_lead = {s: (lead_times[s] - lead_min) / (lead_max - lead_min) for s in suppliers}
-    normalized_quality = {s: (quality_max - quality_scores[s]) / (quality_max - quality_min) for s in suppliers}  # Fixed normalization
+    def safe_normalization(value, min_val, max_val):
+        return 0 if max_val == min_val else (value - min_val) / (max_val - min_val)
+    
+    normalized_costs = {s: safe_normalization(costs[s], cost_min, cost_max) for s in suppliers}
+    normalized_lead = {s: safe_normalization(lead_times[s], lead_min, lead_max) for s in suppliers}
+    normalized_quality = {s: safe_normalization(quality_scores[s], quality_min, quality_max) for s in suppliers}
+
 
     model += lpSum([
         x[s, t] * weekly_demand[t] * (w1 * normalized_costs[s] + w2 * normalized_lead[s] + w3 * normalized_quality[s]) 
