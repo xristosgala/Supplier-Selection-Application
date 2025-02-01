@@ -105,7 +105,7 @@ if st.button("Optimize"):
         st.success("Status: Optimal")
       
         # Convert to DataFrame for better formatting
-        df = pd.DataFrame(detailed_results)
+        df = pd.DataFrame(results)
         
         # Display the DataFrame in Streamlit
         st.write("Results in a Tabular Form:")
