@@ -109,8 +109,7 @@ if st.button("Optimize"):
         # Display the DataFrame in Streamlit
         st.write("Results in a Tabular Form:")
         if not df.empty:
-            st.dataframe(df.style.format({f"Supplier {s + 1} Cost": "${:.2f}" for s in suppliers})),
-            st.dataframe(df.style.format({f"Supplier {s +  1} Allocation": "{:.2f} Units" for s in suppliers}))
+            st.dataframe(df.style.format({f"Supplier {s + 1} Allocation": "{:.2f}", f"Supplier {s + 1} Cost": "${:.2f}" for s in suppliers}))
     else:
         st.warning("No feasible solution found!")
 
