@@ -51,6 +51,8 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
 
     # Output selected suppliers and allocations per week
     selected_allocations = {(s, t): x[s, t].varValue * weekly_demand[t] for s in suppliers for t in range(num_weeks) if x[s, t].varValue > 0}
+
+    model_result = LpStatus[model.status]
       
     # Create a new list to hold details with added cost info
     detailed_results = []
@@ -72,7 +74,7 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
     if not df.empty:
         st.dataframe(df.style.format({"Allocation": "{:.0f}", "Cost": "${:.2f}"}))
 
-    return detailed_results
+    return detailed_results, model_result
 
 
 # Streamlit App
@@ -103,19 +105,22 @@ else:
 
 # Solve and Display Results
 if st.button("Optimize"):
-    results = solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppliers, costs, lead_times, quality_scores, 
+    results, model_result= solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppliers, costs, lead_times, quality_scores, 
                                      capacities, min_order, num_active_suppliers, weekly_demand, service_rate)
 
     st.subheader("Optimization Results")
-    if results['Status']=='Optimal':
-        st.success(f"Status: {results['Status']}")
-        st.write(f"Total Cost: {results['Total Cost']}")
-    
+    if model_result=='Optimal':
+        st.success(Status: Optimal)
+      
         # Convert results to DataFrame
-        df = pd.DataFrame(results["Details"])
+        st.write("Results in a Tabular Form:")
+        # Convert to DataFrame for better formatting
+        df = pd.DataFrame(detailed_results)
+        
+        # Display the DataFrame in Streamlit
         st.write("Results in a Tabular Form:")
         if not df.empty:
-            st.dataframe(df.style.format({"Allocation": "{:.0f}"}))
+            st.dataframe(df.style.format({"Allocation": "{:.0f}", "Cost": "${:.2f}"}))
     else:
         st.warning("No feasible solution found!")
 
