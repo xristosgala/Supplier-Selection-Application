@@ -41,7 +41,7 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
 
     # Constraints
     for t in range(num_weeks):
-        model += lpSum([x[s, t] * weekly_demand[t] for s in suppliers]) >= weekly_demand[t]  # Meet weekly demand
+        model += lpSum([x[s, t] * weekly_demand[t] for s in suppliers]) == weekly_demand[t]  # Meet weekly demand
         model += lpSum([y[s, t] for s in suppliers]) == num_active_suppliers  # Set number of active suppliers per week
         for s in suppliers:
             model += x[s, t] * weekly_demand[t] <= capacities[s]  # Capacity constraint
