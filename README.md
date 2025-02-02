@@ -46,26 +46,16 @@ The optimization model aims to minimize the weighted sum of normalized costs, le
 Minimize the total cost:
 
 $$
-\min Z = \sum_{s=1}^{S} \sum_{t=1}^{T} x_{s,t} \cdot D_{t} (w1 \cdot C_s + w2 \cdot L_s + w3 \cdot Q_s
+\min Z = \sum_{s=1}^{S} \sum_{t=1}^{T} x_{s,t} \cdot D_t (w1 \cdot C_s + w2 \cdot L_s + w3 \cdot Q_s)
 $$
 
-### **Constraints**:
+### Constraints:
 
-1. **Employee Balance**:
-- For week 1:  
+1. **Demand Satisfaction**:  
 
-$$ 
-E_1 = initial_employees + H_1 - F_1 
 $$
-
-- For subsequent weeks $i > 1$:
-
-$$ 
-E_i = E_{i-1} + H_i - F_i 
+\sum_{s=1}^{S} x_{s,t} \cdot D_t \eq D_t forall T
 $$
-
-3. **Demand Satisfaction**:  
-Ensure sufficient workforce (including overtime and underutilization) to meet demand:  
 
 $$ 
 E_i \cdot working_hours + O_i + U_i \geq D_i \cdot service_rate
