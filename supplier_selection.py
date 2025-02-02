@@ -75,7 +75,7 @@ def plot_supply_chain_graphs(df, suppliers, costs, quality_scores):
     allocation_cols = [f"Supplier {s + 1} Allocation" for s in suppliers]
     df_plot = df.melt(id_vars=["Week"], value_vars=allocation_cols, var_name="Supplier", value_name="Allocation")
     
-    fig, ax = plt.subplots(figsize=(8, 4))
+    fig, ax = plt.subplots(figsize=(6, 3))
     sns.barplot(x="Week", y="Allocation", hue="Supplier", data=df_plot, ax=ax)
     ax.set_ylabel("Allocation Amount")
     ax.set_title("Supplier Allocation per Week")
@@ -93,7 +93,7 @@ def plot_supply_chain_graphs(df, suppliers, costs, quality_scores):
     fig, ax = plt.subplots()
     
     for s in suppliers:
-        ax.scatter(costs[s], quality_scores[s], label=f"Supplier {s + 1}", s=10)
+        ax.scatter(costs[s], quality_scores[s], label=f"Supplier {s + 1}", s=50)
     
     ax.set_xlabel("Cost per Unit")
     ax.set_ylabel("Quality Score")
