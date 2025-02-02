@@ -125,7 +125,6 @@ if st.button("Optimize"):
   
         def plot_supply_chain_graphs(df, suppliers, costs, quality_scores):
             # Stacked Bar Chart: Weekly Supplier Allocation
-            st.subheader("Weekly Supplier Allocation")
             allocation_cols = [f"Supplier {s + 1} Allocation" for s in suppliers]
             df_plot = df.melt(id_vars=["Week"], value_vars=allocation_cols, var_name="Supplier", value_name="Allocation")
             
@@ -136,7 +135,6 @@ if st.button("Optimize"):
             st.pyplot(fig)
             
             # Pie Chart: Total Cost Contribution by Supplier
-            st.subheader("Total Cost Contribution by Supplier")
             total_cost_per_supplier = {f"Supplier {s + 1}": df[f"Supplier {s + 1} Cost"].sum() for s in suppliers}
             
             fig, ax = plt.subplots()
@@ -145,7 +143,6 @@ if st.button("Optimize"):
             st.pyplot(fig)
             
             # Scatter Plot: Quality vs. Cost Trade-Off
-            st.subheader("Quality vs. Cost Trade-Off")
             fig, ax = plt.subplots()
             
             for s in suppliers:
@@ -158,7 +155,8 @@ if st.button("Optimize"):
             st.pyplot(fig)
         
         # Inside the Streamlit App (After Optimization Results)
-        plot_supply_chain_graphs(df, suppliers, costs, quality_scores)
+        if st.button("Generate Insights"):
+            plot_supply_chain_graphs(df, suppliers, costs, quality_scores)
   
     else:
         st.warning("No feasible solution found!")
