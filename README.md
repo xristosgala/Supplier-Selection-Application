@@ -1,88 +1,52 @@
 # Supplier Selection Application
 
 ## Overview
-The Supplier Selection Application optimizes cost, lead time, and quality score to find the optimal combination of suppliers and their allocations. It uses **Linear Programming (LP)** to model and solve the problem, integrating constraints like demand satisfaction, warehouse capacity and order cosntraints. The application is built with **PuLP** (a Python library for linear programming) for optimization and **Streamlit** for an interactive, web-based user interface.
 
-Users can input parameters, view results in tabular format, and explore insights through visualizations. The app helps decision-makers design efficient supplier selection strategies and adjust inputs to explore various scenarios.  
+This application is a Supplier Selection Optimization tool built using **Streamlit** and **PuLP** for linear programming. It helps businesses optimize supplier selection based on cost, lead time, and quality while ensuring demand fulfillment.
+
+## Features
+
+- Optimization using Linear Programming
+
+- Customizable Weights for Cost, Lead Time, and Quality
+
+- Automatic Demand Generation
+
+- Interactive Visualizations (Supplier Allocations, Cost Distribution, Trade-offs)
+
+- Streamlit-Based User Interface
 
 👉 **Try the app here:** [Supplier Selection App](https://supplier-selection-application-5hhlomtv722jufn4z4wioe.streamlit.app/)
 
 ---
 
-## Features
+## Optimization Model
 
-### 1. **User-Friendly Input Interface**
-- Configure all parameters via the Streamlit sidebar:
-  - **Number of Weeks:** Number of the time horizon in weeks.
-  - **Number of Suppliers:** Number of available suppliers.
-  - **Weights:** Cost per unit, lead time, and quality score.
-  - **Supplier Details:** Warehouse capacity, minimum order constraint.
-  - **Costs:** Hiring, firing, salary, penalty, and overtime costs.
-  - **Demand Data:** Choose between manually inputting demand or generating random demand within a specified range.
+The optimization model aims to minimize the weighted sum of normalized costs, lead times, and quality scores:
 
-### 2. **Optimization Model**
-The application solves a Linear Programming (LP) model with the following features:
-- **Objective Function:** Minimize the total cost, which includes:
-  - Hiring cost
-  - Firing cost
-  - Salary cost
-  - Overtime cost
-  - Penalty for unmet demand
-- **Constraints:**
-  - **Employee Balance:** Maintains continuity of workforce between weeks.
-  - **Demand Satisfaction:** Meets weekly demand with a combination of regular workforce, overtime, and unmet demand allowance.
-  - **Hiring/Firing Limits:** Caps on maximum hiring and firing per week.
-  - **Overtime Limits:** Restricted overtime hours based on employee count.
-  - **Unmet Demand Limits** Ensures the unmet demand is greater than or equal to the left demand after employees work and overtime.
-  - **Budget Constraint:** Ensures total cost does not exceed the defined budget.
+### Indexes
+- $s$: Supplier index (1, 2, ..., $S$).
+- $t$: Week index (1,2,...,$T$).
 
-### 3. **Interactive Results and Visualizations**
-- **Tabular Summary:** A detailed breakdown of weekly performance metrics:
-  - Demand
-  - Hiring and firing decisions
-  - Employee count
-  - Overtime hours
-  - Unmet demand
-- **Plots for Insightful Analysis:**
-  - **Hired vs. Fired Employees:** A side-by-side bar chart to visualize weekly hiring and firing.
-  - **Overtime vs. Unmet Demand:** A side-by-side bar chart comparison of how unmet demand is handled through overtime or left unaddressed.
-  - **Total Workforce vs. Demand:** A line chart to analyze workforce capacity (including overtime) against demand.
-  - **Cost Distribution Pie Chart:** An interactive pie chart showing the proportion of costs (hiring, firing, salary, overtime, and penalties).
+### Decision Variable
+- $x_{s,t}$: fraction of demand fulfilled by supplier $s$ at time $t$ (Continuous variable).
+- $y_{s,t}$: binary variable indicating if a supplier is active in a given week.
 
-## Mathematical Formulation
-
-### **Indexes**
-- $i$: Week index (1, 2, ..., $m$).
-
-### **Parameters**
-- $D_i$: Weekly demand (in hours) at week $i$.
-- **Costs:**
-  - `hiring_cost`: Cost to hire one employee per week.
-  - `firing_cost`: Cost to fire one employee per week.
-  - `salary_cost`: Cost to maintain one employee per week.
-  - `penalty_cost`: Cost for unmet demand per week.
-  - `overtime_cost`: Cost of overtime hours per week.
-- **Employee Details:**
-  - `initial_employees`: Initial workforce at week 1.
-  - `maxh`: Maximum number of employees that can be hired per week.
-  - `maxf`: Maximum number of employees that can be fired per week.
-  - `overtime_rate`: Maximum overtime hours per employee.
-  - `working_hours`: Maximum regular working hours per employee.
-- `budget`: Maximum budget available.
-- `service_rate`: Fraction of demand that must be met each week.
-
-### **Decision Variables**
-- $H_i$: Number of employees hired in week $i$.
-- $F_i$: Number of employees fired in week $i$.
-- $E_i$: Number of employees maintained in week $i$.
-- $O_i$: Total overtime hours in week $i$.
-- $U_i$: Unmet demand (in hours) in week $i$.
-
-### **Objective Function**:
+### Parameters
+- $D_t$: Weekly demand at week $t$.
+- $C_s$: The cost of procuring from supplier $s$ per unit.
+- $L_s$: The time required for delivery per supplier $s$.
+- $Q_s$: Quality score per supplier $s$.
+- Weights for Cost $w1$, Lead Time $w2$, and Quality $w3$
+- Number of Suppliers (S) – Total number of suppliers considered.
+- $Capacity_s$: The maximum units a supplier can provide.
+- $OrderRequirement_s$: The smallest quantity that can be ordered.
+ 
+### Objective Function:
 Minimize the total cost:
 
 $$
-\min Z = \sum_{i=1}^{m} H_i \cdot hiring_cost + F_i \cdot firing_cost + E_i \cdot salary_cost + O_i \cdot overtime_cost + U_i \cdot penalty_cost
+\min Z = \sum_{s=1}^{S} \sum_{t=1}^{T} x_{s,t} \cdot D_{t} (w1 \cdot C_s + w2 \cdot L_s + w3 \cdot Q_s
 $$
 
 ### **Constraints**:
