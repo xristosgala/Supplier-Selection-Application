@@ -152,11 +152,10 @@ if st.button("Optimize"):
         st.write("Results in a Tabular Form:")
         if not df.empty:
             st.dataframe(df.style.format(format_dict))
-        
-# Inside the Streamlit App (After Optimization Results)
-if st.button("Generate Insights"):
-    plot_supply_chain_graphs(df, suppliers, costs, quality_scores)
   
     else:
         st.warning("No feasible solution found!")
 
+# Inside the Streamlit App (After Optimization Results)
+if st.button("Generate Insights"):
+    plot_supply_chain_graphs(df, suppliers, costs, quality_scores)
