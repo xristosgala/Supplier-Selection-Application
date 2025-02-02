@@ -2,9 +2,11 @@ import streamlit as st
 import pandas as pd
 from pulp import LpProblem, LpMinimize, LpVariable, lpSum, value, LpStatus
 import random
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppliers, costs, lead_times, quality_scores, 
-                                     capacities, min_order, num_active_suppliers, weekly_demand, service_rate):
+                                     capacities, min_order, num_active_suppliers, weekly_demand):
 
     # Create optimization model
     model = LpProblem("Supplier_Selection_Optimization", LpMinimize)
@@ -89,7 +91,6 @@ min_order = {supplier: st.sidebar.number_input(f"Minimum Order for Supplier {sup
 num_active_suppliers = st.sidebar.number_input("Number of Active Suppliers", min_value=1, max_value=10, value=2)
 demand_range = st.sidebar.slider("Demand Range", min_value=10, max_value=1000, value=(20, 100))
 random_demand = st.sidebar.checkbox("Generate Random Demand", value=True)
-service_rate = st.sidebar.slider("Service Rate", min_value=0.00, max_value=1.00, value=0.95)
 
 if random_demand:
     weekly_demand = [random.randint(demand_range[0], demand_range[1]) for _ in range(num_weeks)]
@@ -99,7 +100,7 @@ else:
 # Solve and Display Results
 if st.button("Optimize"):
     detailed_results, model_result, total_cost = solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppliers, costs, lead_times, quality_scores, 
-                                     capacities, min_order, num_active_suppliers, weekly_demand, service_rate)
+                                     capacities, min_order, num_active_suppliers, weekly_demand)
 
     st.subheader("Optimization Results")
     if model_result=='Optimal':
@@ -121,6 +122,45 @@ if st.button("Optimize"):
         st.write("Results in a Tabular Form:")
         if not df.empty:
             st.dataframe(df.style.format(format_dict))
+  
+    def plot_supply_chain_graphs(df, suppliers, costs, quality_scores):
+        # Stacked Bar Chart: Weekly Supplier Allocation
+        st.subheader("Weekly Supplier Allocation")
+        allocation_cols = [f"Supplier {s + 1} Allocation" for s in suppliers]
+        df_plot = df.melt(id_vars=["Week"], value_vars=allocation_cols, var_name="Supplier", value_name="Allocation")
+        
+        fig, ax = plt.subplots(figsize=(10, 5))
+        sns.barplot(x="Week", y="Allocation", hue="Supplier", data=df_plot, ax=ax)
+        ax.set_ylabel("Allocation Amount")
+        ax.set_title("Supplier Allocation per Week")
+        st.pyplot(fig)
+        
+        # Pie Chart: Total Cost Contribution by Supplier
+        st.subheader("Total Cost Contribution by Supplier")
+        total_cost_per_supplier = {f"Supplier {s + 1}": df[f"Supplier {s + 1} Cost"].sum() for s in suppliers}
+        
+        fig, ax = plt.subplots()
+        ax.pie(total_cost_per_supplier.values(), labels=total_cost_per_supplier.keys(), autopct='%1.1f%%', startangle=90)
+        ax.set_title("Total Cost Contribution")
+        st.pyplot(fig)
+        
+        # Scatter Plot: Quality vs. Cost Trade-Off
+        st.subheader("Quality vs. Cost Trade-Off")
+        fig, ax = plt.subplots()
+        
+        for s in suppliers:
+            ax.scatter(costs[s], quality_scores[s], label=f"Supplier {s + 1}", s=100)
+        
+        ax.set_xlabel("Cost per Unit")
+        ax.set_ylabel("Quality Score")
+        ax.set_title("Quality vs. Cost Trade-Off")
+        ax.legend()
+        st.pyplot(fig)
+    
+    # Inside the Streamlit App (After Optimization Results)
+    if st.button("Generate Insights"):
+        plot_supply_chain_graphs(df, suppliers, costs, quality_scores)
+  
     else:
         st.warning("No feasible solution found!")
 
