@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppliers, costs, lead_times, quality_scores, 
-                                     capacities, min_order, num_active_suppliers, weekly_demand):
+                                     capacities, min_order, weekly_demand):
 
     # Create optimization model
     model = LpProblem("Supplier_Selection_Optimization", LpMinimize)
@@ -42,7 +42,6 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
     # Constraints
     for t in range(num_weeks):
         model += lpSum([x[s, t] * weekly_demand[t] for s in suppliers]) == weekly_demand[t]  # Meet weekly demand
-        model += lpSum([y[s, t] for s in suppliers]) == num_active_suppliers  # Set number of active suppliers per week
         for s in suppliers:
             model += x[s, t] * weekly_demand[t] <= capacities[s]  # Capacity constraint
             model += x[s, t] * weekly_demand[t] >= min_order[s] * y[s, t]  # Minimum order constraint (only if active)
@@ -118,7 +117,6 @@ lead_times = {supplier: st.sidebar.number_input(f"Lead Time for Supplier {suppli
 quality_scores = {supplier: st.sidebar.number_input(f"Quality Score for Supplier {supplier+1}", min_value=1, max_value=100, value=8) for supplier in suppliers}
 capacities = {supplier: st.sidebar.number_input(f"Capacity for Supplier {supplier+1}", min_value=1, max_value=1000, value=100) for supplier in suppliers}
 min_order = {supplier: st.sidebar.number_input(f"Minimum Order for Supplier {supplier+1}", min_value=10, max_value=100, value=10) for supplier in suppliers}
-num_active_suppliers = st.sidebar.number_input("Number of Active Suppliers", min_value=1, max_value=num_suppliers, value=2)
 demand_range = st.sidebar.slider("Demand Range", min_value=10, max_value=1000, value=(20, 100))
 random_demand = st.sidebar.checkbox("Generate Random Demand", value=True)
 
@@ -130,7 +128,7 @@ else:
 # Solve and Display Results
 if st.button("Optimize"):
     detailed_results, model_result, total_cost = solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppliers, costs, lead_times, quality_scores, 
-                                     capacities, min_order, num_active_suppliers, weekly_demand)
+                                     capacities, min_order, weekly_demand)
 
     st.subheader("Optimization Results")
     if model_result=='Optimal':
