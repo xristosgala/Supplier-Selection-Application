@@ -5,7 +5,7 @@ The Supplier Selection Application optimizes cost, lead time, and quality score 
 
 Users can input parameters, view results in tabular format, and explore insights through visualizations. The app helps decision-makers design efficient supplier selection strategies and adjust inputs to explore various scenarios.  
 
-👉 **Try the app here:** [Workforce Planning App](https://workforce-planning-scmzo5wmkrecgorpzupb3h.streamlit.app/)
+👉 **Try the app here:** [Supplier Selection App](https://supplier-selection-application-5hhlomtv722jufn4z4wioe.streamlit.app/)
 
 ---
 
@@ -13,9 +13,11 @@ Users can input parameters, view results in tabular format, and explore insights
 
 ### 1. **User-Friendly Input Interface**
 - Configure all parameters via the Streamlit sidebar:
+  - **Number of Weeks:** Number of the time horizon in weeks.
+  - **Number of Suppliers:** Number of available suppliers.
+  - **Weights:** Cost per unit, lead time, and quality score.
+  - **Supplier Details:** Warehouse capacity, minimum order constraint.
   - **Costs:** Hiring, firing, salary, penalty, and overtime costs.
-  - **Employee Details:** Initial workforce, maximum hiring/firing limits, working hours, and overtime rate.
-  - **Budget and Demand:** Weekly budget cap, demand data, and service rate.
   - **Demand Data:** Choose between manually inputting demand or generating random demand within a specified range.
 
 ### 2. **Optimization Model**
