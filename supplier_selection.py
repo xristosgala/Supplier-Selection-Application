@@ -85,7 +85,7 @@ def plot_supply_chain_graphs(df, suppliers, costs, quality_scores):
     total_cost_per_supplier = {f"Supplier {s + 1}": df[f"Supplier {s + 1} Cost"].sum() for s in suppliers}
     
     fig, ax = plt.subplots()
-    ax.pie(total_cost_per_supplier.values(), labels=total_cost_per_supplier.keys(), autopct='%1.1f%%', startangle=90)
+    ax.pie(total_cost_per_supplier.values(), labels=total_cost_per_supplier.keys(), autopct='%1.1f%%', startangle=50)
     ax.set_title("Total Cost Contribution")
     st.pyplot(fig)
     
