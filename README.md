@@ -19,7 +19,7 @@ The optimization model aims to minimize the weighted sum of normalized costs, le
 
 ### Indexes
 - $s$: Supplier index (1, 2, ..., $S$).
-- $t$: Week index (1,2,...,$T$).
+- $t$: Week index (1,2,..., $T$).
 
 ### Decision Variable
 - $x_{s,t}$: fraction of demand fulfilled by supplier $s$ at time $t$ (Continuous variable).
