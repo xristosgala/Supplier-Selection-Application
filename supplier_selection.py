@@ -71,6 +71,36 @@ def solve_supplier_selection_problem(num_weeks, w1, w2, w3, num_suppliers, suppl
 
     return detailed_results, model_result, total_cost
 
+def plot_supply_chain_graphs(df, suppliers, costs, quality_scores):
+    # Stacked Bar Chart: Weekly Supplier Allocation
+    allocation_cols = [f"Supplier {s + 1} Allocation" for s in suppliers]
+    df_plot = df.melt(id_vars=["Week"], value_vars=allocation_cols, var_name="Supplier", value_name="Allocation")
+    
+    fig, ax = plt.subplots(figsize=(10, 5))
+    sns.barplot(x="Week", y="Allocation", hue="Supplier", data=df_plot, ax=ax)
+    ax.set_ylabel("Allocation Amount")
+    ax.set_title("Supplier Allocation per Week")
+    st.pyplot(fig)
+    
+    # Pie Chart: Total Cost Contribution by Supplier
+    total_cost_per_supplier = {f"Supplier {s + 1}": df[f"Supplier {s + 1} Cost"].sum() for s in suppliers}
+    
+    fig, ax = plt.subplots()
+    ax.pie(total_cost_per_supplier.values(), labels=total_cost_per_supplier.keys(), autopct='%1.1f%%', startangle=90)
+    ax.set_title("Total Cost Contribution")
+    st.pyplot(fig)
+    
+    # Scatter Plot: Quality vs. Cost Trade-Off
+    fig, ax = plt.subplots()
+    
+    for s in suppliers:
+        ax.scatter(costs[s], quality_scores[s], label=f"Supplier {s + 1}", s=100)
+    
+    ax.set_xlabel("Cost per Unit")
+    ax.set_ylabel("Quality Score")
+    ax.set_title("Quality vs. Cost Trade-Off")
+    ax.legend()
+    st.pyplot(fig)
 
 # Streamlit App
 st.title("Supplier Selection Application")
@@ -122,41 +152,10 @@ if st.button("Optimize"):
         st.write("Results in a Tabular Form:")
         if not df.empty:
             st.dataframe(df.style.format(format_dict))
-  
-        def plot_supply_chain_graphs(df, suppliers, costs, quality_scores):
-            # Stacked Bar Chart: Weekly Supplier Allocation
-            allocation_cols = [f"Supplier {s + 1} Allocation" for s in suppliers]
-            df_plot = df.melt(id_vars=["Week"], value_vars=allocation_cols, var_name="Supplier", value_name="Allocation")
-            
-            fig, ax = plt.subplots(figsize=(10, 5))
-            sns.barplot(x="Week", y="Allocation", hue="Supplier", data=df_plot, ax=ax)
-            ax.set_ylabel("Allocation Amount")
-            ax.set_title("Supplier Allocation per Week")
-            st.pyplot(fig)
-            
-            # Pie Chart: Total Cost Contribution by Supplier
-            total_cost_per_supplier = {f"Supplier {s + 1}": df[f"Supplier {s + 1} Cost"].sum() for s in suppliers}
-            
-            fig, ax = plt.subplots()
-            ax.pie(total_cost_per_supplier.values(), labels=total_cost_per_supplier.keys(), autopct='%1.1f%%', startangle=90)
-            ax.set_title("Total Cost Contribution")
-            st.pyplot(fig)
-            
-            # Scatter Plot: Quality vs. Cost Trade-Off
-            fig, ax = plt.subplots()
-            
-            for s in suppliers:
-                ax.scatter(costs[s], quality_scores[s], label=f"Supplier {s + 1}", s=100)
-            
-            ax.set_xlabel("Cost per Unit")
-            ax.set_ylabel("Quality Score")
-            ax.set_title("Quality vs. Cost Trade-Off")
-            ax.legend()
-            st.pyplot(fig)
         
-    # Inside the Streamlit App (After Optimization Results)
-    if st.button("Generate Insights"):
-        plot_supply_chain_graphs(df, suppliers, costs, quality_scores)
+# Inside the Streamlit App (After Optimization Results)
+if st.button("Generate Insights"):
+    plot_supply_chain_graphs(df, suppliers, costs, quality_scores)
   
     else:
         st.warning("No feasible solution found!")
