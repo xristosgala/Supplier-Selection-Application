@@ -1,19 +1,12 @@
 # Supplier Selection Application
-
 ## Overview
-
 This application is a Supplier Selection Optimization tool built using **Streamlit** and **PuLP** for linear programming. It helps businesses optimize supplier selection based on cost, lead time, and quality while ensuring demand fulfillment.
 
 ## Features
-
 - Optimization using Linear Programming
-
 - Customizable Weights for Cost, Lead Time, and Quality
-
 - Automatic Demand Generation
-
 - Interactive Visualizations (Supplier Allocations, Cost Distribution, Trade-offs)
-
 - Streamlit-Based User Interface
 
 👉 **Try the app here:** [Supplier Selection App](https://supplier-selection-application-5hhlomtv722jufn4z4wioe.streamlit.app/)
@@ -54,56 +47,49 @@ $$
 1. **Demand Satisfaction**:  
 
 $$
-\sum_{s=1}^{S} x_{s,t} \cdot D_t \eq D_t forall T
+\sum_{s=1}^{S} x_{s,t} \cdot D_t = D_t \forall t
 $$
+
+2. **Capacity Limits**:  
 
 $$ 
-E_i \cdot working_hours + O_i + U_i \geq D_i \cdot service_rate
+x_{s,t} \cdot D_t \leq capacity_s, \forall s,t 
 $$
 
-4. **Hiring and Firing Caps**:  
-Limit hiring and firing per week:  
+3. **Minimum Order Requirement**:  
 
 $$ 
-H_i \leq maxh, \quad F_i \leq maxf 
+x_{s,t} \cdot D_t \leq OrderRequirement_s \cdot y_{s,t} \forall s,t
 $$
 
-5. **Overtime Limit**:  
-Restrict overtime hours to a percentage of total working hours:  
-
-$$ 
-O_i \leq E_i \cdot overtime_rate 
-$$
-
-6. **Unmet Demand Limit**
-Ensure the Unmet Demand is larger than or equal to the remaining demand after the working hours and the overtime:
+4. **Binary Supplier Activation**
 
 $$
-U_i \geq D_i - E_i \cdot wokring_hours - O[i]
-$$
-
-8. **Budget Constraint**:  
-Ensure total costs do not exceed the budget:  
-
-$$ 
-\sum_{i=1}^{m} H_i \cdot hiring_cost + F_i \cdot firing_cost + E_i \cdot salary_cost + O_i \cdot overtime_cost \leq budget 
+x_{s,t} \leq y_{s,t} \forall s,t
 $$
    
 ### Solving the Model:
 The problem is solved using PuLP's LpProblem method, which uses available solvers (e.g., CBC) to find the optimal solution.
 
-## How to Use:
-1. Input the parameters
-2. Click on "optimize" button
+## How to Use
+### Inputs
+Users can define the following parameters via the Streamlit UI:
+- Number of Weeks (Planning Horizon)
+- Weights for Cost, Lead Time, and Quality
+- Number of Suppliers & Their Properties
+- Weekly Demand (Manual or Randomized)
+
+### Output
+- Optimal Supplier Allocation per Week
+- 
+### Visualizations
+- **Table:** Presents the supplier allocation and their costs per week
+- **Stacked Bar Chart:** Displays supplier allocation per week
+- **Pie Chart:** Shows cost contribution by supplier
+- **Scatter Plot:** Illustrates cost vs. quality trade-offs
 
 ## Requirements:
-- Python 3.x
+- Python
 - Streamlit
-- Pandas
 - PuLP
 - Plotly
-
-## Acknowledgments
-- PuLP for Linear Programming formulation.
-- Plotly for map visualization.
-- Stramlit for web app deployment.
