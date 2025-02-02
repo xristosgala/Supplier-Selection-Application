@@ -81,7 +81,7 @@ Users can define the following parameters via the Streamlit UI:
 
 ### Output
 - Optimal Supplier Allocation per Week
-- 
+
 ### Visualizations
 - **Table:** Presents the supplier allocation and their costs per week
 - **Stacked Bar Chart:** Displays supplier allocation per week
