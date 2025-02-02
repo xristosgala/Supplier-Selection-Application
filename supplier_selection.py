@@ -114,7 +114,7 @@ num_suppliers = st.sidebar.number_input("Number of Suppliers", min_value=1, max_
 suppliers =  [i for i in range(num_suppliers)]
 costs = {supplier: st.sidebar.number_input(f"Cost for Supplier {supplier+1}", min_value=1, max_value=100, value=10) for supplier in suppliers}
 lead_times = {supplier: st.sidebar.number_input(f"Lead Time for Supplier {supplier+1}", min_value=1, max_value=100, value=2) for supplier in suppliers}
-quality_scores = {supplier: st.sidebar.number_input(f"Quality Score for Supplier {supplier+1}", min_value=1, max_value=100, value=8) for supplier in suppliers}
+quality_scores = {supplier: st.sidebar.number_input(f"Quality Score for Supplier {supplier+1}", min_value=1, max_value=10, value=8) for supplier in suppliers}
 capacities = {supplier: st.sidebar.number_input(f"Capacity for Supplier {supplier+1}", min_value=1, max_value=1000, value=100) for supplier in suppliers}
 min_order = {supplier: st.sidebar.number_input(f"Minimum Order for Supplier {supplier+1}", min_value=10, max_value=100, value=10) for supplier in suppliers}
 demand_range = st.sidebar.slider("Demand Range", min_value=10, max_value=1000, value=(20, 100))
